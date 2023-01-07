@@ -22,14 +22,26 @@ server.get("/tweets", (req, res) => {
     const tweets = [];
     const max = TWEETS.length < MAXTWEETS * page ? TWEETS.length : MAXTWEETS * page;
     const min = (MAXTWEETS * (page - 1)) + 0;
-    if(page < 1) return res.status(400).send("Informe uma página válida!");
+    console.log(USERS);
 
+    if(page < 1) return res.status(400).send("Informe uma página válida!");
+    for(let i = min; i < max; i++){
+        tweets.push({
+            ...TWEETS[i], avatar: USERS.find(element => element.username === TWEETS[i].username).avatar
+        })
+    }
     return res.send(tweets);
 })
 
 server.post("/tweets", (req, res) => {
-
+    const {username} = req.headers;
+    const {tweet} = req.body;
     if(USERS.find((e) => e.username === username)) return res.sendStatus(401).send("UNAUTHORIZED");
+    TWEETS.push({
+        username,
+        tweet: tweet.tweet,
+        id: TWEETS.length + 1});
+    res.status(201).send("CREATED");
 })
 
 server.listen(5000, () => {
