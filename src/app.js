@@ -6,13 +6,14 @@ const USERS = [];
 const PORT = 5000;
 const server = express();
 server.use(cors());
-server.use(json());
+server.use(express.json());
 
 server.post("/sign-up", (req, res) =>{
     const userData = req.body
+    if(!userData.username || !userData.avatar) return res.status(400).send("Todos os campos são obrigatórios!")
 
     USERS.push(userData);
-    return res.sendStatus(200).send("OK!");
+    return res.status(200).send("OK!");
 })
 
 server.post("/tweets", (req, res) => {
