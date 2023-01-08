@@ -11,7 +11,8 @@ server.use(express.json());
 
 server.post("/sign-up", (req, res) =>{
     const userdata = req.body
-    if(!userdata.username || !userdata.avatar) return res.status(400).send("Todos os campos são obrigatórios!")
+    if (typeof userdata.username !== 'string'|| userdata.avatar !== 'string') return res.status(400).send("Error. Not String"); 
+    if(!userdata.username || !userdata.avatar) return res.status(400).send("Todos os campos são obrigatórios!");
 
     USERS.push(userdata);
     return res.status(201).send("CREATED");
@@ -49,13 +50,14 @@ server.get("/tweets/:username", (req,res) => {
     }
 
     tweets.reverse();
-    res.status(201).send(tweets);
+    res.status(200).send(tweets);
 })
 
 server.post("/tweets", (req, res) => {  
     const username = req.header("user");
     const tweet = req.body;
-    if(!username || !tweet) return res.status(400).send("Todos os campos são obrigatórios!")
+    if(typeof tweet.tweet !== 'string') return res.status(400).send("Digitar algo válido")
+    if(!username || !tweet.tweet) return res.status(400).send("Todos os campos são obrigatórios!")
     if(!USERS.find((e) => e.username === username)) return res.status(401).send("UNAUTHORIZED");
     TWEETS.push({
         username,
