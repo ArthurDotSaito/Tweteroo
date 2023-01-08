@@ -36,7 +36,7 @@ server.get("/tweets", (req, res) => {
     return res.status(200).send(tweets);
 })
 
-server.get("/tweets/:username", (req,res) => {
+server.get("/tweets/:USERNAME", (req,res) => {
     const username = req.params.username;
     const tweets = []
     let tweetUser = TWEETS.filter((t) => t.username === username);
