@@ -33,7 +33,7 @@ server.get("/tweets", (req, res) => {
         })
         tweets.reverse();
     }
-    return res.send(tweets);
+    return res.status(200).send(tweets);
 })
 
 server.get("/tweets/:username", (req,res) => {
