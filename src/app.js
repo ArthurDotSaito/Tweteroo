@@ -36,9 +36,9 @@ server.get("/tweets", (req, res) => {
     return res.status(200).send(tweets);
 })
 
-server.get("/tweets/:USERNAME", (req,res) => {
+server.get("/tweets/:username", (req,res) => {
     const username = req.params.username;
-    const tweets = []
+    const tweets = [];
     let tweetUser = TWEETS.filter((t) => t.username === username);
     const avatar = USERS.find(u => u.username === tweetUser[0].username).avatar;
     for (let i = tweetUser.length - 1; i >= 0; i--) {
@@ -50,7 +50,7 @@ server.get("/tweets/:USERNAME", (req,res) => {
     }
 
     tweets.reverse();
-    res.sendStatus(200).send(tweets);
+    res.status(200).send(tweets);
 })
 
 server.post("/tweets", (req, res) => {  
