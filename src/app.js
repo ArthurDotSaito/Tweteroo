@@ -10,11 +10,11 @@ server.use(cors());
 server.use(express.json());
 
 server.post("/sign-up", (req, res) =>{
-    const userData = req.body
-    if(!userData.username || !userData.avatar) return res.status(400).send("Todos os campos são obrigatórios!")
+    const userdata = req.body
+    if(!userdata.username || !userdata.avatar) return res.status(400).send("Todos os campos são obrigatórios!")
 
-    USERS.push(userData);
-    return res.sendStatus(200);
+    USERS.push(userdata);
+    return res.status(201).send("CREATED");
 })
 
 server.get("/tweets", (req, res) => {
@@ -26,17 +26,27 @@ server.get("/tweets", (req, res) => {
 
     if(page < 1) return res.status(400).send("Informe uma página válida!");
     for(let i = min; i < max; i++){
+        console.log(USERS[i]);
+        console.log(TWEETS[i]);
+        const tweetAvatar = USERS.find(element => element.username === TWEETS[i].username).avatar
         tweets.push({
-            ...TWEETS[i], avatar: USERS.find(element => element.username === TWEETS[i].username).avatar
+            username: USERS[i].username,
+            avatar: tweetAvatar,
+            tweet: TWEETS[i].tweet
         })
     }
     return res.send(tweets);
 })
 
-server.post("/tweets", (req, res) => {
-    const {username} = req.headers;
-    const {tweet} = req.body;
-    if(USERS.find((e) => e.username === username)) return res.sendStatus(401).send("UNAUTHORIZED");
+server.post("/tweets", (req, res) => {  
+    const username = req.header("user");
+    const tweet = req.body;
+    console.log(username)
+    console.log(tweet)
+    if(!username || !tweet) return res.status(400).send("Todos os campos são obrigatórios!")
+    if(!USERS.find((e) => e.username === username)) return res.status(401).send("UNAUTHORIZED");
+    console.log(USERS);
+    console.log(TWEETS);
     TWEETS.push({
         username,
         tweet: tweet.tweet,
