@@ -25,8 +25,6 @@ server.get("/tweets", (req, res) => {
 
     if(page < 1) return res.status(400).send("Informe uma página válida!");
     for(let i = min; i < max; i++){
-        console.log(USERS[i]);
-        console.log(TWEETS[i]);
         const tweetAvatar = USERS.find(element => element.username === TWEETS[i].username).avatar
         tweets.push({
             ...TWEETS[i],
@@ -37,13 +35,28 @@ server.get("/tweets", (req, res) => {
     return res.send(tweets);
 })
 
+server.get("/tweets/:username", (req,res) => {
+    const username = req.params.username;
+    const tweets = []
+    let tweetUser = TWEETS.filter((t) => t.username === username);
+    const avatar = USERS.find(u => u.username === tweetUser[0].username).avatar;
+    for (let i = tweetUser.length - 1; i >= 0; i--) {
+        tweets.push({
+          username: tweetUser[i].username,
+          avatar: avatar,
+          tweet: tweetUser[i].tweet,
+        });
+    }
+
+    tweets.reverse();
+    res.status(201).send(tweets);
+})
+
 server.post("/tweets", (req, res) => {  
     const username = req.header("user");
     const tweet = req.body;
     if(!username || !tweet) return res.status(400).send("Todos os campos são obrigatórios!")
     if(!USERS.find((e) => e.username === username)) return res.status(401).send("UNAUTHORIZED");
-    console.log(USERS);
-    console.log(TWEETS);
     TWEETS.push({
         username,
         tweet: tweet.tweet,
