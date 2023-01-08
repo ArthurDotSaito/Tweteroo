@@ -11,7 +11,7 @@ server.use(express.json());
 
 server.post("/sign-up", (req, res) =>{
     const userdata = req.body
-    
+    if(! typeof userdata.username === 'string'  ||! typeof userdata.avatar === 'string') return res.status(400).send("Todos os campos devem ser textos");
     if(!userdata.username || !userdata.avatar) return res.status(400).send("Todos os campos são obrigatórios!");
 
     USERS.push(userdata);
