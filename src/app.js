@@ -50,7 +50,7 @@ server.get("/tweets/:username", (req,res) => {
     }
 
     tweets.reverse();
-    res.status(200).send(tweets);
+    res.sendStatus(200).send(tweets);
 })
 
 server.post("/tweets", (req, res) => {  
