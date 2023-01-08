@@ -22,7 +22,6 @@ server.get("/tweets", (req, res) => {
     const tweets = [];
     const max = TWEETS.length < MAXTWEETS * page ? TWEETS.length : MAXTWEETS * page;
     const min = (MAXTWEETS * (page - 1)) + 0;
-    console.log(USERS);
 
     if(page < 1) return res.status(400).send("Informe uma página válida!");
     for(let i = min; i < max; i++){
@@ -33,6 +32,7 @@ server.get("/tweets", (req, res) => {
             ...TWEETS[i],
             avatar: tweetAvatar
         })
+        tweets.reverse();
     }
     return res.send(tweets);
 })
@@ -40,8 +40,6 @@ server.get("/tweets", (req, res) => {
 server.post("/tweets", (req, res) => {  
     const username = req.header("user");
     const tweet = req.body;
-    console.log(username)
-    console.log(tweet)
     if(!username || !tweet) return res.status(400).send("Todos os campos são obrigatórios!")
     if(!USERS.find((e) => e.username === username)) return res.status(401).send("UNAUTHORIZED");
     console.log(USERS);
