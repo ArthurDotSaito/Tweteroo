@@ -30,9 +30,8 @@ server.get("/tweets", (req, res) => {
         console.log(TWEETS[i]);
         const tweetAvatar = USERS.find(element => element.username === TWEETS[i].username).avatar
         tweets.push({
-            username: USERS[i].username,
-            avatar: tweetAvatar,
-            tweet: TWEETS[i].tweet
+            ...TWEETS[i],
+            avatar: tweetAvatar
         })
     }
     return res.send(tweets);
